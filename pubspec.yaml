@@ -27,6 +27,7 @@ dependencies:
   get_it: ^7.1.4
   scoped_model: ^2.0.0-nullsafety.0
   http: ^0.13.3
+  intl: ^0.17.0
 #  fluttertoast: ^8.0.7
 #  shared_preferences: ^2.0.6
 

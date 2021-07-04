@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:spotify_controller_app/service_locator.dart';
-import 'package:spotify_controller_app/ui/views/home_view.dart';
+import 'package:spoon/service_locator.dart';
+import 'package:spoon/ui/views/home_view.dart';
 
 Future<void> main() async {
   setupLocator();

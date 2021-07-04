@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:spotify_controller_app/scoped_model/base_model.dart';
-import 'package:spotify_controller_app/service_locator.dart';
+import 'package:spoon/scoped_model/base_model.dart';
+import 'package:spoon/service_locator.dart';
 
 class BaseView<T extends BaseModel> extends StatefulWidget {
   final GlobalKey<ScaffoldState>? _scaffoldKey;

@@ -1,4 +1,4 @@
-import 'package:spotify_controller_app/scoped_model/base_model.dart';
+import 'package:spoon/scoped_model/base_model.dart';
 
 class HomeModel extends BaseModel {
 

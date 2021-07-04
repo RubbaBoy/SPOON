@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:spotify_controller_app/ui/widgets/progress_bar/_render_progress_bar.dart';
+import 'package:spoon/duration_state.dart';
+import 'package:spoon/ui/widgets/progress_bar/_render_progress_bar.dart';
 
 class ProgressBar extends LeafRenderObjectWidget {
   const ProgressBar({
@@ -9,9 +10,11 @@ class ProgressBar extends LeafRenderObjectWidget {
     required this.thumbColor,
     required this.totalTime,
     required this.currentTime,
+    required this.stateStream,
     this.thumbSize = 20.0,
   }) : super(key: key);
 
+  final Stream<DurationState> stateStream;
   final Color barColor;
   final Color thumbColor;
   final double thumbSize;
@@ -26,6 +29,7 @@ class ProgressBar extends LeafRenderObjectWidget {
       thumbSize: thumbSize,
       totalTime: totalTime,
       currentTime: currentTime,
+      stateStream: stateStream,
     );
   }
 
