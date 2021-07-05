@@ -28,6 +28,14 @@ class RequestService {
     // TODO: Initialize the socket and streams
   }
 
+  void upvoteSong(Song song) {
+
+  }
+
+  void downvoteSong(Song song) {
+
+  }
+
   /// Injects some dummy values into the streams.
   /// TODO: Remove this!
   void dummyStart() {

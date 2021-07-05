@@ -64,14 +64,15 @@ class RenderProgressBar extends RenderBox {
   /// Starts the progression
   void start() {
     progressTime = currentTime.toDouble();
-    timer = Timer.periodic(Duration(milliseconds: 250), (timer) {
-      progressTime += 0.25;
-      currentTime = progressTime.floor();
-      markNeedsPaint();
-      if (currentTime >= totalTime) {
-        timer.cancel();
-      }
-    });
+    // TODO: bruh
+    // timer = Timer.periodic(Duration(milliseconds: 250), (timer) {
+    //   progressTime += 0.25;
+    //   currentTime = progressTime.floor();
+    //   markNeedsPaint();
+    //   if (currentTime >= totalTime) {
+    //     timer.cancel();
+    //   }
+    // });
   }
 
   /// Stops the progression, with an optional absolute stop time.

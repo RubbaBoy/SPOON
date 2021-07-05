@@ -17,4 +17,12 @@ class QueueModel extends Model {
       notifyListeners();
     });
   }
+
+  void addToQueue() {
+    print('Sending to add to queue page');
+  }
+
+  void upvoteSong(Song song) => requestService.upvoteSong(song);
+
+  void downvoteSong(Song song) => requestService.downvoteSong(song);
 }

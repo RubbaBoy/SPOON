@@ -18,13 +18,17 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) => BaseView<HomeModel>(
         onModelReady: (model) => model.init(),
-        builder: (context, child, model) => Padding(
-          padding: const EdgeInsets.all(24),
-          child: Container(
+        builder: (context, child, model) => SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SongPreview(stateStream: service.stateStream),
-                Text('Next Up'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Next Up', style: Theme.of(context).textTheme.headline4, textAlign: TextAlign.left),
+                ),
                 QueueDisplay(),
               ],
             ),

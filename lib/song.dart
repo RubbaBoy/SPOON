@@ -35,4 +35,12 @@ class Song {
     'upvotes': upvotes,
     'downvotes': downvotes,
   };
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Song && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
