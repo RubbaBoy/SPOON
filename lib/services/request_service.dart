@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:spoon/song.dart';
+import 'package:http/http.dart' as http;
 
 class RequestService {
+  static const baseUrl = 'http://localhost:8080';
+
   /// Updates the current queue
   final _queueUpdate = StreamController<List<Song>>.broadcast();
 
@@ -36,18 +40,23 @@ class RequestService {
 
   }
 
+  Future<List<Song>> searchSongs(String search) async {
+    var got = await http.get(Uri.parse('$baseUrl?q=${Uri.encodeComponent(search)}'));
+    return jsonDecode(got.body).map((e) => Song.fromJson(e)).cast<Song>().toList();
+  }
+
   /// Injects some dummy values into the streams.
   /// TODO: Remove this!
   void dummyStart() {
     print('Dummy starting!');
 
     _queueUpdate.add([
-      Song('bbb', 'The Box', 'Please Excuse Me for Being Antisocial', 'Roddy Ricch', true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 3, 0),
-      Song('ccc', 'The Box 2', 'Please Excuse Me for Being Antisocial', 'Roddy Ricch', true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 2, 4),
-      Song('ddd', 'The Box 3', 'Please Excuse Me for Being Antisocial', 'Roddy Ricch', true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 4, 1),
+      Song('bbb', 'The Box', 'Please Excuse Me for Being Antisocial', ['Roddy Ricch'], true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 3, 0),
+      Song('ccc', 'The Box 2', 'Please Excuse Me for Being Antisocial', ['Roddy Ricch'], true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 2, 4),
+      Song('ddd', 'The Box 3', 'Please Excuse Me for Being Antisocial', ['Roddy Ricch'], true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 4, 1),
     ]);
 
-    _currentlyPlaying.add(Song('aaa', 'The Box', 'Please Excuse Me for Being Antisocial', 'Roddy Ricch', true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 1, 0));
+    _currentlyPlaying.add(Song('aaa', 'The Box', 'Please Excuse Me for Being Antisocial', ['Roddy Ricch'], true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 1, 0));
 
     _songPlay.add(null);
 

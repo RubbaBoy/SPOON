@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:spoon/scoped_model/add_queue_model.dart';
 import 'package:spoon/scoped_model/home_model.dart';
 import 'package:spoon/scoped_model/progress_bar_model.dart';
 import 'package:spoon/scoped_model/queue_model.dart';
@@ -20,4 +21,5 @@ void setupLocator() {
   locator.registerFactory(() => ProgressBarModel());
   locator.registerFactory(() => SongPreviewModel());
   locator.registerFactory(() => QueueModel());
+  locator.registerFactory(() => AddQueueModel());
 }

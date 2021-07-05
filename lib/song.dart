@@ -4,20 +4,20 @@ class Song {
   final String id;
   final String name;
   final String album;
-  final String artist;
+  final List<String> artists;
   final bool inQueue;
   final int length;
   final String imageUrl;
   final int upvotes;
   final int downvotes;
 
-  Song(this.id, this.name, this.album, this.artist, this.inQueue, this.length, this.imageUrl, this.upvotes, this.downvotes);
+  const Song(this.id, this.name, this.album, this.artists, this.inQueue, this.length, this.imageUrl, this.upvotes, this.downvotes);
 
   Song.fromJson(Map<String, dynamic> json) :
       id = json['id'],
       name = json['name'],
       album = json['album'],
-      artist = json['artist'],
+      artists = json['artists'].cast<String>(),
       inQueue = json['inQueue'],
       length = json['length'],
       imageUrl = json['imageUrl'],
@@ -28,7 +28,7 @@ class Song {
     'id': id,
     'name': name,
     'album': album,
-    'artist': artist,
+    'artists': artists,
     'inQueue': inQueue,
     'length': length,
     'imageUrl': imageUrl,

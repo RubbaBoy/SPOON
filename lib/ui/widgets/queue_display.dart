@@ -19,7 +19,7 @@ class _QueueDisplayState extends State<QueueDisplay> {
             for (var song in model.queue)
               ItemizedSong(model: model, song: song),
             ElevatedButton(
-              onPressed: model.addToQueue,
+              onPressed: () => model.addToQueue(context),
               child: Text('Add to Queue'),
             ),
           ],

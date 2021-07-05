@@ -1,7 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:spoon/service_locator.dart';
 import 'package:spoon/services/request_service.dart';
 import 'package:spoon/song.dart';
+import 'package:spoon/ui/views/add_queue_view.dart';
 
 class QueueModel extends Model {
   final requestService = locator<RequestService>();
@@ -18,8 +21,9 @@ class QueueModel extends Model {
     });
   }
 
-  void addToQueue() {
+  void addToQueue(BuildContext context) {
     print('Sending to add to queue page');
+    Navigator.push(context, MaterialPageRoute(builder: (_) => QueueView()));
   }
 
   void upvoteSong(Song song) => requestService.upvoteSong(song);

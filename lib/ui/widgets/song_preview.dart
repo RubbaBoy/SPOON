@@ -46,7 +46,7 @@ class _SongPreviewState extends State<SongPreview> {
                   child: Text(model.currentSong?.name ?? '-',
                       style: Theme.of(context).textTheme.headline4),
                 ),
-                Text(model.currentSong?.artist ?? '-',
+                Text(model.currentSong?.artists.join(', ') ?? '-',
                     style: Theme.of(context).textTheme.subtitle1)
               ],
             ),
