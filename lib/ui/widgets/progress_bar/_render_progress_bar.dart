@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' hide TextDirection;
-import 'package:spoon/duration_state.dart';
+import 'package:spoon/scoped_model/progress_bar_model.dart';
 import 'package:spoon/utility.dart';
 
 class RenderProgressBar extends RenderBox {
@@ -14,28 +16,6 @@ class RenderProgressBar extends RenderBox {
     if (_barColor != value) {
       _barColor = value;
       markNeedsPaint();
-    }
-  }
-
-  Color _thumbColor;
-
-  Color get thumbColor => _thumbColor;
-
-  set thumbColor(Color value) {
-    if (_thumbColor != value) {
-      _thumbColor = value;
-      markNeedsPaint();
-    }
-  }
-
-  double _thumbSize;
-
-  double get thumbSize => _thumbSize;
-
-  set thumbSize(double value) {
-    if (_thumbSize != value) {
-      _thumbSize = value;
-      markNeedsLayout();
     }
   }
 
@@ -55,33 +35,56 @@ class RenderProgressBar extends RenderBox {
   int get currentTime => _currentTime;
 
   set currentTime(int value) {
-    print('current time = $value');
     if (_currentTime != value) {
       _currentTime = value;
       markNeedsPaint();
     }
   }
 
+  /// The timer that controls the progression of the progress bar.
+  Timer? timer;
+  ProgressBarModel model;
+
   RenderProgressBar({
     required Color barColor,
-    required Color thumbColor,
-    required double thumbSize,
     required int totalTime,
     required int currentTime,
-    required Stream<DurationState> stateStream,
+    required this.model,
   })  : _barColor = barColor,
-        _thumbColor = thumbColor,
-        _thumbSize = thumbSize,
         _totalTime = totalTime,
         _currentTime = currentTime,
         assert(totalTime > 0, 'totalTime must be an integer above 0'),
         assert(currentTime <= totalTime && currentTime >= 0,
             'currentTime must be inclusively between 0 and totalTime') {
-    // print('stream aaaa');
-    stateStream.listen((event) {
-      this.currentTime = event.currentTime;
+    model.handler = ProgressHandler(start: start, stop: stop);
+  }
+
+  double progressTime = 0;
+
+  /// Starts the progression
+  void start() {
+    progressTime = currentTime.toDouble();
+    timer = Timer.periodic(Duration(milliseconds: 250), (timer) {
+      progressTime += 0.25;
+      currentTime = progressTime.floor();
+      markNeedsPaint();
+      if (currentTime >= totalTime) {
+        timer.cancel();
+      }
     });
   }
+
+  /// Stops the progression, with an optional absolute stop time.
+  void stop([int? seconds]) {
+    timer?.cancel();
+    if (seconds != null) {
+      progressTime = seconds.toDouble();
+      currentTime = seconds;
+    }
+  }
+
+  @override
+  bool get isRepaintBoundary => true;
 
   @override
   void performLayout() {
@@ -91,12 +94,12 @@ class RenderProgressBar extends RenderBox {
   @override
   Size computeDryLayout(BoxConstraints constraints) {
     final desiredWidth = constraints.maxWidth;
-    final desiredHeight = thumbSize;
-    final desiredSize = Size(desiredWidth, desiredHeight);
+    final desiredSize = Size(desiredWidth, _minDesiredHeight);
     return constraints.constrain(desiredSize);
   }
 
   static const _minDesiredWidth = 100.0;
+  static const _minDesiredHeight = 25.0;
 
   @override
   double computeMinIntrinsicWidth(double height) => _minDesiredWidth;
@@ -105,12 +108,10 @@ class RenderProgressBar extends RenderBox {
   double computeMaxIntrinsicWidth(double height) => _minDesiredWidth;
 
   @override
-  double computeMinIntrinsicHeight(double width) => thumbSize;
+  double computeMinIntrinsicHeight(double width) => _minDesiredHeight;
 
   @override
-  double computeMaxIntrinsicHeight(double width) => thumbSize;
-
-  double _currentThumbValue = 0.5;
+  double computeMaxIntrinsicHeight(double width) => _minDesiredHeight;
 
   @override
   void paint(PaintingContext context, Offset offset) {
@@ -162,8 +163,10 @@ class RenderProgressBar extends RenderBox {
       ..strokeWidth = 5;
 
     final playingPoint = Offset(
-        (size.width - (timeWidth + spacing) * 2) * (currentTime / totalTime),
-        size.height / 2).translate(leftPoint.dx, 0);
+            (size.width - (timeWidth + spacing) * 2) *
+                (progressTime / totalTime),
+            size.height / 2)
+        .translate(leftPoint.dx, 0);
     canvas.drawLine(leftPoint, playingPoint, playedBar);
     canvas.restore();
   }

@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:spoon/duration_state.dart';
+import 'package:spoon/scoped_model/song_preview_model.dart';
+import 'package:spoon/service_locator.dart';
 import 'package:spoon/ui/widgets/progress_bar/progress_bar.dart';
 
 class SongPreview extends StatefulWidget {
@@ -12,6 +16,8 @@ class SongPreview extends StatefulWidget {
 }
 
 class _SongPreviewState extends State<SongPreview> {
+  final model = locator<SongPreviewModel>();
+
   @override
   Widget build(BuildContext context) => Card(
         child: Column(
@@ -23,13 +29,21 @@ class _SongPreviewState extends State<SongPreview> {
             // ),
                   ProgressBar(
                     barColor: Colors.blue,
-                    thumbColor: Colors.red,
-                    thumbSize: 20.0,
-                    totalTime: 10,
+                    totalTime: 75,
                     currentTime: 0,
-                    stateStream: widget.stateStream,
+                    model: model.progressBarModel,
                   ),
           ],
         ),
       );
+
+  @override
+  void initState() {
+    super.initState();
+
+    // TODO: Bad
+    Timer(Duration(seconds: 1), () {
+      model.start();
+    });
+  }
 }
