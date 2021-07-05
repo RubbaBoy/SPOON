@@ -1,5 +1,7 @@
-class ProgressBarModel {
-  ProgressHandler? handler;
+import 'package:scoped_model/scoped_model.dart';
+
+class ProgressBarModel extends Model {
+  late ProgressHandler handler;
 }
 
 class ProgressHandler {

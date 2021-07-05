@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:spoon/service_locator.dart';
-import 'package:spoon/services/music_service.dart';
+import 'package:spoon/scoped_model/queue_model.dart';
+import 'package:spoon/ui/widgets/widget_view.dart';
 
 class QueueDisplay extends StatefulWidget {
   const QueueDisplay({Key? key}) : super(key: key);
@@ -10,20 +10,16 @@ class QueueDisplay extends StatefulWidget {
 }
 
 class _QueueDisplayState extends State<QueueDisplay> {
-  final service = locator<MusicService>();
-
   @override
-  Widget build(BuildContext context) => Column(
-    children: [
-      Card(
-        child: Text('one'),
-      ),
-      Card(
-        child: Text('two'),
-      ),
-      Card(
-        child: Text('three'),
-      ),
-    ],
+  Widget build(BuildContext context) => WidgetView<QueueModel>(
+    onModelReady: (model) => model.init(),
+      builder: (context, child, model) => Column(
+      children: [
+        for (var song in model.queue)
+          Card(
+            child: Text('${song.name}: ${song.id}'),
+          ),
+      ],
+    ),
   );
 }

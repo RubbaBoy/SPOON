@@ -12,7 +12,7 @@ class BaseView<T extends BaseModel> extends StatefulWidget {
   final Function(T)? fabAdd;
   final bool showFab;
 
-  BaseView(
+  const BaseView(
       {GlobalKey<ScaffoldState>? scaffoldKey,
       required ScopedModelDescendantBuilder<T> builder,
       this.appBar,
@@ -28,7 +28,7 @@ class BaseView<T extends BaseModel> extends StatefulWidget {
 }
 
 class _BaseViewState<T extends BaseModel> extends State<BaseView<T>> {
-  T _model = locator<T>();
+  final T _model = locator<T>();
   ScopedModelDescendantBuilder<T>? otherBuilder;
 
   @override
