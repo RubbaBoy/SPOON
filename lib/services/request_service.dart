@@ -52,14 +52,4 @@ class RequestService {
     _songPause.close();
     _songPlay.close();
   }
-
-// Future<List<Song>> getQueue() async => [
-//   Song('bbb', 'The Box', 'Please Excuse Me for Being Antisocial', 'Roddy Ricch', true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 3, 0),
-//   Song('ccc', 'The Box 2', 'Please Excuse Me for Being Antisocial', 'Roddy Ricch', true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 2, 4),
-//   Song('ddd', 'The Box 3', 'Please Excuse Me for Being Antisocial', 'Roddy Ricch', true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 4, 1),
-// ];
-//
-// Future<Song> getCurrentlyPlaying() async =>
-//     Song('aaa', 'The Box', 'Please Excuse Me for Being Antisocial', 'Roddy Ricch', true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 1, 0);
-
 }

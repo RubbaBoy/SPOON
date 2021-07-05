@@ -20,22 +20,36 @@ class _SongPreviewState extends State<SongPreview> {
   Widget build(BuildContext context) => WidgetView<SongPreviewModel>(
         onModelReady: (model) => model.init(),
         builder: (context, child, model) => Card(
-          child: Column(
-            children: [
-              Center(
-                child: Container(
-                  child: Image.network(
-                      'https://cdns-images.dzcdn.net/images/cover/4cecb47ae25837b9dd022004b5cacbdc/350x350.jpg',
-                      fit: BoxFit.contain),
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              children: [
+                Center(
+                  child: Container(
+                    child: model.currentSong == null
+                        ? Container(color: Colors.grey)
+                        : Image.network(model.currentSong!.imageUrl,
+                            fit: BoxFit.contain),
+                  ),
                 ),
-              ),
-              ProgressBar(
-                barColor: Colors.blue,
-                totalTime: 75,
-                currentTime: 0,
-                model: model.progressBarModel,
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 24),
+                  child: ProgressBar(
+                    barColor: Colors.blue,
+                    totalTime: 75,
+                    currentTime: 0,
+                    model: model.progressBarModel,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Text(model.currentSong?.name ?? '-',
+                      style: Theme.of(context).textTheme.headline4),
+                ),
+                Text(model.currentSong?.artist ?? '-',
+                    style: Theme.of(context).textTheme.subtitle1)
+              ],
+            ),
           ),
         ),
       );
