@@ -35,6 +35,7 @@ class _QueueViewState extends State<QueueView> {
                           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: TextField(
                             onChanged: model.onUpdate,
+                            onSubmitted: model.onSubmit,
                             controller: model.searchController,
                             decoration: InputDecoration(
                               hintText: 'Search songs',

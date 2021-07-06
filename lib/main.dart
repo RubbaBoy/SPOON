@@ -6,11 +6,15 @@ import 'package:spoon/ui/views/home_view.dart';
 
 Future<void> main() async {
   setupLocator();
-  runApp(MyApp());
+  final socketService = locator<SocketService>();
+  runApp(MyApp(socketStartFuture: socketService.startSocket()));
 }
 
 class MyApp extends StatelessWidget {
-  final socketService = locator<SocketService>();
+
+  final Future<bool> socketStartFuture;
+
+  const MyApp({Key? key, required this.socketStartFuture}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +24,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: FutureBuilder(
-          future: socketService.startSocket(),
+          future: socketStartFuture,
           builder: (context, AsyncSnapshot<bool> snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:spoon/utility.dart';
 
 class SocketService {
@@ -10,18 +11,23 @@ class SocketService {
 
   /// Starts the socket, connecting to the TV/server program. Returns true if
   /// the connection was successful, false if otherwise.
-  Future<bool> startSocket() async =>
-      Socket.connect(env['TV_IP'], 8081).then((socket) {
-        _socket = socket;
-        socket.map(utf8.decode).map(jsonDecode).listen((json) => controller.add(json));
-        return true;
-      }).catchError((_, __) => false);
+  Future<bool> startSocket() async {
+    return Socket.connect(const String.fromEnvironment('TV_IP'), 8099,
+            timeout: Duration(seconds: 5))
+        .then((socket) {
+      _socket = socket;
+      socket
+          .map(utf8.decode)
+          .map(jsonDecode)
+          .listen((json) => controller.add(json));
+      return true;
+    }).catchError((e, s) => false);
+  }
 
   /// Writes to the socket with a given [name], [uuid], and [data], and waits
   /// for a response from the server. An error is thrown if 15 seconds pass with
   /// no server response.
-  Future<Json> writeSocket(
-      String name, Json data, [String? uuid]) {
+  Future<Json> writeSocket(String name, Json data, [String? uuid]) {
     final completer = Completer<Json>();
     uuid ??= genUuid();
 
@@ -53,11 +59,8 @@ class SocketService {
   void listenTo(String name, Future<Json> Function(Json json) callback) {
     controller.stream.listen((json) {
       if (json['name'] == name) {
-        callback(json).then((result) => _socket.write(jsonEncode({
-          'name': name,
-          'uuid': json['uuid'],
-          ...result
-        })));
+        callback(json).then((result) => _socket.write(
+            jsonEncode({'name': name, 'uuid': json['uuid'], ...result})));
       }
     });
   }
