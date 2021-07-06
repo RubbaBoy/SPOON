@@ -1,15 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:spoon/service_locator.dart';
+import 'package:spoon/services/socket_service.dart';
 import 'package:spoon/song.dart';
-import 'package:http/http.dart' as http;
 
 class RequestService {
+  final socketService = locator<SocketService>();
+
   static const baseUrl = 'http://localhost:8080';
 
-  /// Updates the current queue
   final _queueUpdate = StreamController<List<Song>>.broadcast();
 
+  /// Updates the current queue
   Stream<List<Song>> get queueUpdate => _queueUpdate.stream;
 
   /// Updates the current song being played.
@@ -28,22 +31,22 @@ class RequestService {
 
   Stream get songPlay => _songPlay.stream;
 
-  void initStreams() {
-    // TODO: Initialize the socket and streams
-  }
+  /// Sends an upvote request for the given [song].
+  Future<void> upvoteSong(Song song) =>
+      socketService.writeSocket('upvote', {'id': song.id});
 
-  void upvoteSong(Song song) {
+  /// Sends an downvote request for the given [song].
+  Future<void> downvoteSong(Song song) =>
+      socketService.writeSocket('downvote', {'id': song.id});
 
-  }
+  /// Searches for songs with the given [string] query.
+  Future<List<Song>> searchSongs(String search) async =>
+      socketService.writeSocket('search', {'query': search}).then((json) =>
+          json['query'].map((e) => Song.fromJson(e)).cast<Song>().toList());
 
-  void downvoteSong(Song song) {
-
-  }
-
-  Future<List<Song>> searchSongs(String search) async {
-    var got = await http.get(Uri.parse('$baseUrl?q=${Uri.encodeComponent(search)}'));
-    return jsonDecode(got.body).map((e) => Song.fromJson(e)).cast<Song>().toList();
-  }
+  /// Sends a queue request for the given [song].
+  Future<void> queueSong(Song song) async =>
+      socketService.writeSocket('addQueue', {'id': song.id});
 
   /// Injects some dummy values into the streams.
   /// TODO: Remove this!
@@ -51,12 +54,48 @@ class RequestService {
     print('Dummy starting!');
 
     _queueUpdate.add([
-      Song('bbb', 'The Box', 'Please Excuse Me for Being Antisocial', ['Roddy Ricch'], true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 3, 0),
-      Song('ccc', 'The Box 2', 'Please Excuse Me for Being Antisocial', ['Roddy Ricch'], true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 2, 4),
-      Song('ddd', 'The Box 3', 'Please Excuse Me for Being Antisocial', ['Roddy Ricch'], true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 4, 1),
+      Song(
+          'bbb',
+          'The Box',
+          'Please Excuse Me for Being Antisocial',
+          ['Roddy Ricch'],
+          true,
+          196,
+          'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f',
+          3,
+          0),
+      Song(
+          'ccc',
+          'The Box 2',
+          'Please Excuse Me for Being Antisocial',
+          ['Roddy Ricch'],
+          true,
+          196,
+          'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f',
+          2,
+          4),
+      Song(
+          'ddd',
+          'The Box 3',
+          'Please Excuse Me for Being Antisocial',
+          ['Roddy Ricch'],
+          true,
+          196,
+          'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f',
+          4,
+          1),
     ]);
 
-    _currentlyPlaying.add(Song('aaa', 'The Box', 'Please Excuse Me for Being Antisocial', ['Roddy Ricch'], true, 196, 'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f', 1, 0));
+    _currentlyPlaying.add(Song(
+        'aaa',
+        'The Box',
+        'Please Excuse Me for Being Antisocial',
+        ['Roddy Ricch'],
+        true,
+        196,
+        'https://i.scdn.co/image/ab67616d00001e02600adbc750285ea1a8da249f',
+        1,
+        0));
 
     _songPlay.add(null);
 

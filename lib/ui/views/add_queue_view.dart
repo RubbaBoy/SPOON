@@ -19,7 +19,7 @@ class _QueueViewState extends State<QueueView> {
 
   @override
   Widget build(BuildContext context) => BaseView<AddQueueModel>(
-        onModelReady: (model) => model.init(),
+        onModelReady: (model) => model.init(context),
         builder: (context, child, model) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(
@@ -55,7 +55,10 @@ class _QueueViewState extends State<QueueView> {
                 child: ListView(
                   children: [
                     for (var song in model.displayResults)
-                      ItemizedSong(song: song, enableVoting: false),
+                      InkWell(
+                        child: ItemizedSong(song: song, enableVoting: false),
+                        onTap: () => model.queueSong(song),
+                      ),
                   ],
                 ),
               ),

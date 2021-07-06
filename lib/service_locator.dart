@@ -6,6 +6,7 @@ import 'package:spoon/scoped_model/queue_model.dart';
 import 'package:spoon/scoped_model/song_preview_model.dart';
 import 'package:spoon/services/music_service.dart';
 import 'package:spoon/services/request_service.dart';
+import 'package:spoon/services/socket_service.dart';
 
 final locator = GetIt.instance;
 
@@ -13,6 +14,7 @@ void setupLocator() {
   // Register services
   locator.registerLazySingleton(() => MusicService());
   locator.registerLazySingleton(() => RequestService());
+  locator.registerLazySingleton(() => SocketService());
 
   // Register models
   locator.registerFactory(() => HomeModel());

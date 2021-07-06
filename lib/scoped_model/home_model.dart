@@ -7,7 +7,5 @@ class HomeModel extends BaseModel {
 
   void init() {
     print('init HomeModel');
-
-    requestService.initStreams();
   }
 }
