@@ -56,11 +56,11 @@ class SocketService {
   /// Listens to incoming socket messages with the name of [name]. When
   /// received, the [callback] should return a [Json] response. In this
   /// response, `name` and `uuid` are NOT required.
-  void listenTo(String name, Future<Json> Function(Json json) callback) {
+  void listenTo(String name, Future<Json?> Function(Json json) callback) {
     controller.stream.listen((json) {
       if (json['name'] == name) {
         callback(json).then((result) => _socket.write(
-            jsonEncode({'name': name, 'uuid': json['uuid'], ...result})));
+            jsonEncode({'name': name, 'uuid': json['uuid'], ...(result ?? {})})));
       }
     });
   }

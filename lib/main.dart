@@ -7,7 +7,12 @@ import 'package:spoon/ui/views/home_view.dart';
 Future<void> main() async {
   setupLocator();
   final socketService = locator<SocketService>();
-  runApp(MyApp(socketStartFuture: socketService.startSocket()));
+  final requestService = locator<RequestService>();
+  runApp(MyApp(socketStartFuture: socketService.startSocket()
+      .then((value) async {
+        await requestService.init();
+        return value;
+      })));
 }
 
 class MyApp extends StatelessWidget {

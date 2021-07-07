@@ -6,6 +6,8 @@ final Uuid uuid = Uuid();
 
 Map<String, dynamic> get env => Platform.environment;
 
+Json get emptyJson => {};
+
 typedef Json = Map<String, dynamic>;
 
 String genUuid() => uuid.v4();

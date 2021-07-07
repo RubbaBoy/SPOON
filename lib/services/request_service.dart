@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:spoon/service_locator.dart';
 import 'package:spoon/services/socket_service.dart';
@@ -47,6 +46,25 @@ class RequestService {
   /// Sends a queue request for the given [song].
   Future<void> queueSong(Song song) async =>
       socketService.writeSocket('addQueue', {'id': song.id});
+
+  Future<void> init() async {
+    socketService.listenTo('queueUpdate', (json) async {
+      _queueUpdate.add(
+          json['queue'].map((e) => Song.fromJson(json)).cast<Song>().toList());
+    });
+
+    socketService.listenTo('currentlyPlaying', (json) async {
+      _currentlyPlaying.add(Song.fromJson(json['song']));
+    });
+
+    socketService.listenTo('pause', (json) async {
+      _songPause.add(json['time']);
+    });
+
+    socketService.listenTo('play', (json) async {
+      _songPlay.add(null);
+    });
+  }
 
   /// Injects some dummy values into the streams.
   /// TODO: Remove this!
