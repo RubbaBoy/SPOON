@@ -26,6 +26,10 @@ class AddQueueModel extends BaseModel {
     searchController.clear();
   }
 
+  void back(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
   void onUpdate(String text) {
     waiting?.cancel();
     waiting = Timer(Duration(seconds: 1), () => onSubmit(text));

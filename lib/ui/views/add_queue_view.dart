@@ -30,9 +30,13 @@ class _QueueViewState extends State<QueueView> {
                   color: Theme.of(context).cardColor,
                   child: Row(
                     children: [
+                      IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () => model.back(context),
+                      ),
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          padding: EdgeInsets.symmetric(horizontal: 5),
                           child: TextField(
                             onChanged: model.onUpdate,
                             onSubmitted: model.onSubmit,
